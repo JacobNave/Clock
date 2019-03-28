@@ -1,0 +1,246 @@
+  
+<html>
+    <script>
+        window.onload = draw;
+        
+        function draw()
+        {   
+            //canvases
+            var background = document.getElementById("background");
+            var hoursCanvas = document.getElementById("hour");
+            var minutesCanvas = document.getElementById("minute");
+            var secondsCanvas = document.getElementById("second");
+            var hHandCanvas = document.getElementById("hourHand");
+            var mHandCanvas = document.getElementById("minuteHand");
+            var sHandCanvas = document.getElementById("secondHand");
+            var amPmCanvas = document.getElementById("ampm");
+            var amPmBallCanvas = document.getElementById("ampmBall");
+            
+            //contexts
+            var backgroundCtx = background.getContext("2d");
+            var hoursCtx = hoursCanvas.getContext("2d");
+            var minutesCtx = minutesCanvas.getContext("2d");
+            var secondsCtx = secondsCanvas.getContext("2d");
+            var hHandCtx = hHandCanvas.getContext("2d");
+            var mHandCtx = mHandCanvas.getContext("2d");
+            var sHandCtx = sHandCanvas.getContext("2d");
+            var amPmCtx = amPmCanvas.getContext("2d");
+            var amPmBallCtx = amPmBallCanvas.getContext("2d");
+
+            
+            //variables
+            var time = new Date();
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+            var hRatio = (hours % 12) / 12;
+            var mRatio = minutes / 60;
+            var sRatio = seconds / 60;
+            var hRadius = hoursCanvas.width / 2 - 80;
+            var mRadius = minutesCanvas.width / 2 - 40;
+            var sRadius = background.width / 2;
+            
+            
+            //clear canvases
+            hoursCtx.clearRect(0, 0, hoursCanvas.width, hoursCanvas.height);
+            minutesCtx.clearRect(0, 0, minutesCanvas.width, minutesCanvas.height);
+            secondsCtx.clearRect(0, 0, secondsCanvas.width, secondsCanvas.height);
+            hHandCtx.clearRect(0, 0, hHandCanvas.width, hHandCanvas.height);
+            mHandCtx.clearRect(0, 0, mHandCanvas.width, mHandCanvas.height);
+            sHandCtx.clearRect(0, 0, sHandCanvas.width, sHandCanvas.height);
+            
+            //draw
+            drawBackground(backgroundCtx, background, time.getHours())
+            
+            drawHours(hoursCtx, hoursCanvas, hRadius, hRatio);
+            
+            drawHourHand(hHandCtx, hHandCanvas, hRadius, hRatio);
+            
+            drawMinutes(minutesCtx, minutesCanvas, mRadius, mRatio);
+            
+            drawMinuteHand(mHandCtx, mHandCanvas, mRadius, mRatio);
+            
+            drawSeconds(secondsCtx, secondsCanvas, sRadius, sRatio);
+                  
+            drawSecondHand(sHandCtx, sHandCanvas, sRadius, sRatio);
+            
+            drawAmPm(amPmCtx, amPmBallCtx, amPmBallCanvas, time);
+            
+            
+            requestAnimationFrame(draw);
+        }
+        
+        function drawSlider(hour, amPmBallCtx)
+        {
+            //Pm
+            if(hour > 11)
+            {
+                amPmBallCtx.fillStyle = "#50C0FF";
+                amPmBallCtx.beginPath();
+                amPmBallCtx.arc(58, 35, 15, 0, 2 * Math.PI);
+                amPmBallCtx.fill();
+                amPmBallCtx.closePath();
+            }
+            //Am
+            else 
+            {
+                amPmBallCtx.fillStyle = "#50C0FF";
+                amPmBallCtx.beginPath();
+                amPmBallCtx.arc(32, 35, 15, 0, 2 * Math.PI);
+                amPmBallCtx.fill();
+                amPmBallCtx.closePath();
+                amPmBallCtx.closePath();
+            }
+        }
+
+        function drawHours(hoursCtx, hoursCanvas, hRadius, hRatio)
+        {
+            hoursCtx.fillStyle = "red";
+            hoursCtx.beginPath();
+            hoursCtx.arc(hoursCanvas.width / 2, hoursCanvas.height / 2,  hRadius, -1/2 * Math.PI, hRatio * 2 * Math.PI -1/2 * Math.PI, false);
+            hoursCtx.lineTo(hoursCanvas.width / 2, hoursCanvas.height / 2);
+            hoursCtx.lineTo(hoursCanvas.width / 2, 0);
+            hoursCtx.fill();
+            hoursCtx.closePath();
+            
+            hoursCtx.fillStyle = "black";
+            hoursCtx.beginPath();
+            hoursCtx.arc(hoursCanvas.width / 2, hoursCanvas.height / 2,  hoursCanvas.width / 2 - 110, -1/2 * Math.PI, 2 * Math.PI -1/2 * Math.PI, false);
+            hoursCtx.fill();
+            hoursCtx.closePath();
+        }
+        
+        function drawMinutes(minutesCtx, minutesCanvas, mRadius, mRatio)
+        {
+            minutesCtx.fillStyle = "blue";
+            minutesCtx.beginPath();
+            minutesCtx.arc(minutesCanvas.width / 2, minutesCanvas.height / 2, mRadius, -1/2 * Math.PI, mRatio * 2 * Math.PI -1/2 * Math.PI, false);
+            minutesCtx.lineTo(minutesCanvas.width / 2, minutesCanvas.height / 2);
+            minutesCtx.lineTo(minutesCanvas.width / 2, 40);
+            minutesCtx.fill();
+            minutesCtx.closePath();
+            
+            minutesCtx.fillStyle = "black";
+            minutesCtx.beginPath();
+            minutesCtx.arc(minutesCanvas.width / 2, minutesCanvas.height / 2,  minutesCanvas.width / 2 - 70, -1/2 * Math.PI, 2 * Math.PI -1/2 * Math.PI, false);
+            minutesCtx.fill();
+            minutesCtx.closePath();
+        }
+        
+        function drawBackground(backgroundCtx, background, timeHours)
+        {
+            backgroundCtx.fillStyle = "black";
+            backgroundCtx.fillRect(0, 0, background.width, background.height);
+        }
+        
+        function drawSeconds(secondsCtx, secondsCanvas, sRadius, sRatio)
+        {
+            secondsCtx.fillStyle = "green";
+            secondsCtx.beginPath();
+            secondsCtx.arc(secondsCanvas.width / 2, secondsCanvas.height / 2, sRadius, -1/2 * Math.PI, sRatio * 2 * Math.PI -1/2 * Math.PI, false);
+            secondsCtx.lineTo(secondsCanvas.width / 2, secondsCanvas.height / 2);
+            secondsCtx.lineTo(secondsCanvas.width / 2, 80);
+            secondsCtx.fill();
+            secondsCtx.closePath();
+            
+            secondsCtx.fillStyle = "black";
+            secondsCtx.beginPath();
+            secondsCtx.arc(secondsCanvas.width / 2, secondsCanvas.height / 2,  secondsCanvas.width / 2 - 30, -1/2 * Math.PI, 2 * Math.PI -1/2 * Math.PI, false);
+            secondsCtx.fill();
+            secondsCtx.closePath();
+        }
+        
+
+        function drawHourHand(hHandCtx, hHandCanvas, hRadius, hRatio)
+        {
+            hHandCtx.strokeStyle = "white";
+            hHandCtx.lineWidth = 12;
+            hHandCtx.beginPath();
+            hHandCtx.moveTo(hHandCanvas.width / 2, hHandCanvas.height / 2);
+            hHandCtx.lineTo(hRadius * Math.cos(hRatio * 2 * Math.PI -1/2 * Math.PI) + 250, hRadius * Math.sin(hRatio * 2 * Math.PI -1/2 * Math.PI) + 250);
+            hHandCtx.stroke();
+            hHandCtx.closePath();
+            
+            hHandCtx.strokeStyle = "red";
+            hHandCtx.lineWidth = 10;
+            hHandCtx.beginPath();
+            hHandCtx.moveTo(hHandCanvas.width / 2, hHandCanvas.height / 2);
+            hHandCtx.lineTo(hRadius * Math.cos(hRatio * 2 * Math.PI -1/2 * Math.PI) + 250, hRadius * Math.sin(hRatio * 2 * Math.PI -1/2 * Math.PI) + 250);
+            hHandCtx.stroke();
+            hHandCtx.closePath();
+        }
+        
+        function drawMinuteHand(mHandCtx, mHandCanvas, mRadius, mRatio)
+        {
+            mHandCtx.strokeStyle = "white";
+            mHandCtx.lineWidth = 12;
+            mHandCtx.beginPath();
+            mHandCtx.moveTo(mHandCanvas.width / 2, mHandCanvas.height / 2);
+            mHandCtx.lineTo(mRadius * Math.cos(mRatio * 2 * Math.PI -1/2 * Math.PI) + 250, mRadius * Math.sin(mRatio * 2 * Math.PI -1/2 * Math.PI) + 250);
+            mHandCtx.stroke();
+            mHandCtx.closePath();
+            
+            mHandCtx.strokeStyle = "blue";
+            mHandCtx.lineWidth = 10;
+            mHandCtx.beginPath();
+            mHandCtx.moveTo(mHandCanvas.width / 2, mHandCanvas.height / 2);
+            mHandCtx.lineTo(mRadius * Math.cos(mRatio * 2 * Math.PI -1/2 * Math.PI) + 250, mRadius * Math.sin(mRatio * 2 * Math.PI -1/2 * Math.PI) + 250);
+            mHandCtx.stroke();
+            mHandCtx.closePath();
+        }
+        
+        function drawSecondHand(sHandCtx, sHandCanvas, sRadius, sRatio)
+        {
+            sHandCtx.strokeStyle = "white";
+            sHandCtx.lineWidth = 12;
+            sHandCtx.beginPath();
+            sHandCtx.moveTo(sHandCanvas.width / 2, sHandCanvas.height / 2);
+            sHandCtx.lineTo(sRadius * Math.cos(sRatio * 2 * Math.PI -1/2 * Math.PI) + 250, sRadius * Math.sin(sRatio * 2 * Math.PI -1/2 * Math.PI) + 250);
+            sHandCtx.stroke();
+            sHandCtx.closePath();
+            
+            sHandCtx.strokeStyle = "green";
+            sHandCtx.lineWidth = 10;
+            sHandCtx.beginPath();
+            sHandCtx.moveTo(sHandCanvas.width / 2, sHandCanvas.height / 2);
+            sHandCtx.lineTo(sRadius * Math.cos(sRatio * 2 * Math.PI -1/2 * Math.PI) + 250, sRadius * Math.sin(sRatio * 2 * Math.PI -1/2 * Math.PI) + 250);
+            sHandCtx.stroke();
+            sHandCtx.closePath();
+        }
+        
+        function drawAmPm(amPmCtx, amPmBallCtx, amPmBallCanvas, time)
+        {
+            //ampm slot 
+            amPmCtx.fillStyle = "lightgray";
+            amPmCtx.font = "17px Arial";
+            amPmCtx.beginPath();
+            amPmCtx.fillText("AM   PM", 12, 17);
+            amPmCtx.fillRect(30, 20, 30, 30);
+            amPmCtx.arc(60, 35, 15, -1/2 * Math.PI, 2 * Math.PI);
+            amPmCtx.arc(30, 35, 15, 1/2 * Math.PI, 2 * Math.PI);
+            amPmCtx.fill();
+            amPmCtx.closePath();
+            
+            //ampm ball inside of slot
+            amPmBallCtx.clearRect(0, 0, amPmBallCanvas.width, amPmBallCanvas.height);
+            drawSlider(time.getHours(), amPmBallCtx);
+        }
+        
+    </script>
+    
+    <body>
+        <canvas id = "background" width = "500px" height = "500px" style="z-index: 1; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "second" width = "500px" height="500px" style="z-index: 2; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "minute" width = "500px" height="500px" style="z-index: 3; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "hour" width = "500px" height="500px" style="z-index: 4; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "hourHand" width = "500px" height="500px" style="z-index: 7; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "minuteHand" width = "500px" height="500px" style="z-index: 6; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "secondHand" width = "500px" height="500px" style="z-index: 5; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "ampm" width = "500px" height="500px" style="z-index: 8; position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id = "ampmBall" width = "500px" height="500px" style="z-index: 9; position:absolute; left:0px; top:0px;"></canvas>
+    </body>
+</html>
+
+
+
+
